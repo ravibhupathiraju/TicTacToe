@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<style>
+	body {
+    	text-align: center;
+	}
+	table, td {
+		text-align: center;
+	}
+	table {
+		border-collapse: collapse;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 40px;
+		width: 300px;
+	}
+	td {
+	    padding: 40px;
+			border: 2px solid green;
+			width: 20px;
+			margin: 20px;
+	}
+	TTDtable > tr {
+	}
+
+	#letsplaybutton {
+		background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+	}
+	#msg_div {
+		margin-top: 40px;
+		padding: 15px 32px;
+		font-size: 20px;;;
+	}
+	#title {
+		background-color: #4CAF50; /* Green */
+		color: white;
+		font-size: 30px;
+	}
+</style>
+<head>
+	<title>Tic Tac Toe</title>
+</head>
+	<body>
+		<h2 id ='title' >Tic Tac Toe</h2>
+		<table id="TTTtable">
+			<tr>
+				<td tblidx='0' id='0' ></td>
+				<td id ='1' tblidx='1'></td>
+				<td id='2' tblidx='2'></td>
+			</tr>
+			<tr>
+				<td id='3' tblidx='3'></td>
+				<td id='4' tblidx='4'></td>
+				<td id='5' tblidx='5'></td>
+			</tr>
+			<tr>
+				<td id='6' tblidx='6'></td>
+				<td id='7' tblidx='7'></td>
+				<td id ='8' tblidx='8'></td>
+			</tr>
+		</table>
+		<button id="letsplaybutton" >New Game!</button>
+		<div id="msg_div" class="">
+    </div>
+
+	<script>
+	var button= document.getElementById("letsplaybutton");
+	var msg = document.getElementById('msg_div');
+	var tableclick = document.getElementById('TTTtable');
+	var firstplayer = "X";
+	var secondplayer = "O";
+	var clickindx	= 0;
+	var clickvalue = "X";
+	var array = [];
+	var whoseturn = "firstplayer";
+	var result = "false";
+	var noneditable = "no";
+	var msgrelay = "";
+	var gamecomplete = false;
+	var drawcounter = 0;
+
+	button.addEventListener('click',function() {
+			msg.innerHTML="Player X turn";
+			array = []
+			whoseturn = "firstplayer";
+			result = "false";
+			noneditable = "no";
+			msgrelay = "";
+			clickvalue = "X";
+			gamecomplete = false;
+			drawcounter = 0;
+			for (var i = 0; i < 9; i++) {
+				document.getElementById(i).innerHTML="";
+			}
+	});
+
+	tableclick.addEventListener("click",function(evt) {
+		if (gamecomplete) {return;}
+		drawcounter++;
+		clickindx = evt.target.getAttribute("id");
+		if (array[clickindx] !== undefined) {
+			noneditable = "yes";
+			msgrelay = "Already entered value cannot be changed";
+		}
+		if (noneditable == "yes") {
+			msg.innerHTML=msgrelay;
+			noneditable = "no";
+			return;
+		}
+		array[clickindx] = clickvalue;
+		evt.target.innerHTML = clickvalue;
+		gamecomplete = checkgamecompletion();
+		if (gamecomplete){
+			msg.innerHTML="Game over! "+ whoseturn + " is the winner!";
+			noneditable = "yes";
+			array = [];
+			msgrelay="Game is already over!";
+			return;
+		} else {
+			msg.innerHTML="continue playing";
+			if (drawcounter == 9) {
+				msg.innerHTML="Game over, Its a Draw!";
+				return;
+			}
+		}
+		if (whoseturn === "firstplayer") {
+			evt.target.innerHTML = "X";
+			whoseturn = "secondplayer";
+			msg.innerHTML= "Player Y turn";
+			clickvalue = "O";
+		} else {
+			evt.target.innerHTML = "O";
+			whoseturn = "firstplayer";
+			clickvalue = "X";
+			msg.innerHTML= "Player X turn";
+		}
+	});
+
+	function checkgamecompletion (){
+        var a = array;
+				console.log(a.length);
+        return ((a[0] === a[1]) && (a[0] === a[2]) && (a[0] !== undefined)) ||
+            (a[3] === a[4] && a[4] === a[5] && a[3] !== undefined) ||  // mid row
+            (a[6] === a[7] && a[7] === a[8] && a[6] !== undefined) ||  // bottom row
+
+            (a[0] === a[3] && a[3] === a[6] && a[0] !== undefined) ||  // left col
+            (a[1] === a[4] && a[4] === a[7] && a[1] !== undefined) ||  // mid col
+            (a[2] === a[5] && a[5] === a[8] && a[2] !== undefined) ||  // right col
+
+            (a[0] === a[4] && a[4] === a[8] && a[0] !== undefined) ||  // topleft to bottom right
+            (a[2] === a[4] && a[4] === a[6] && a[2] !== undefined);    // bottom left to top right
+    }
+	</script>
+
+</html>
